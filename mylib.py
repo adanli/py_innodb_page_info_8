@@ -11,7 +11,7 @@ class myargv(object):
     def __init__(self, argv):
         self.argv = argv
         self.parms = {}
-        self.tablespace = argv
+        self.tablespace = argv[1]
 
     def parse_cmdline(self):
         argv = self.argv
@@ -34,7 +34,7 @@ class myargv(object):
             else:
                 self.tablespace = argv[0]
                 argv = argv[1:]
-        if self.parms.has_key('-h'):
+        if self.parms.__contains__('-h'):
             print ('Get InnoDB Page Info')
             print ('Usage: python py_innodb_page_info.py [OPTIONS] tablespace_file\n')
             print ('The following options may be given as the first argument:')
@@ -60,7 +60,6 @@ def get_innodb_page_type(myargv):
         page_offset = mach_read_from_n(page, FIL_PAGE_OFFSET, 4)
         page_type = mach_read_from_n(page, FIL_PAGE_TYPE, 2)
         if myargv.parms.__contains__('-v'):
-        # if myargv.parms.has_key('-v'):
             if page_type == '45bf':
                 page_level = mach_read_from_n(page, FIL_PAGE_DATA + PAGE_LEVEL, 2)
                 print ("page offset %s, page type <%s>, page level <%s>" %(page_offset, innodb_page_type[page_type], page_level))
